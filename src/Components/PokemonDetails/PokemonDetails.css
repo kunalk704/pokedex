@@ -1,3 +1,7 @@
+.pokedex-redirect {
+  text-align: center;
+}
+
 .pokemon-details-wrapper {
   display: flex;
   flex-direction: column;
