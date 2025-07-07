@@ -1,9 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import downloadPokemons from "../utils/downloadPokemons";
 
-function usePokemonList() {
-  const DEFAULT_URL = "https://pokeapi.co/api/v2/pokemon";
-
+function usePokemonList(DEFAULT_URL) {
   const [pokemonListState, setPokemonListState] = useState({
     pokemonList: [],
     pokedexUrl: DEFAULT_URL,
@@ -11,39 +9,8 @@ function usePokemonList() {
     prevUrl: DEFAULT_URL,
   });
 
-  async function downloadPokemons() {
-    const response = await axios.get(
-      pokemonListState.pokedexUrl ? pokemonListState.pokedexUrl : DEFAULT_URL
-    );
-
-    const pokemonResults = response.data.results;
-
-    const pokemonPromise = pokemonResults.map((pokemon) =>
-      axios.get(pokemon.url)
-    );
-
-    const pokemonListData = await axios.all(pokemonPromise);
-
-    const pokemonFinalList = pokemonListData.map((pokemonData) => {
-      const pokemon = pokemonData.data;
-      return {
-        id: pokemon.id,
-        name: pokemon.name,
-        image: pokemon.sprites.other.dream_world.front_default,
-        types: pokemon.types,
-      };
-    });
-
-    setPokemonListState({
-      ...pokemonListState,
-      pokemonList: pokemonFinalList,
-      nextUrl: response.data.next,
-      prevUrl: response.data.previous,
-    });
-  }
-
   useEffect(() => {
-    downloadPokemons();
+    downloadPokemons(pokemonListState, setPokemonListState, DEFAULT_URL);
   }, [pokemonListState.pokedexUrl]);
 
   return [pokemonListState, setPokemonListState];
