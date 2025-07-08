@@ -1,11 +1,10 @@
 import "./PokemonDetails.css";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import usePokemon from "../../hooks/usePokemon";
 import Pokemon from "../Pokemon/Pokemon";
 
-function PokemonDetails() {
-  const { id } = useParams();
-  const [pokemon, pokemonListState] = usePokemon(id);
+function PokemonDetails({ pokemonName }) {
+  const [pokemon, pokemonListState] = usePokemon(pokemonName);
   return (
     <>
       <h1 className="pokedex-redirect">
